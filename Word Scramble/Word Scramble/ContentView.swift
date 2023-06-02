@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationView {
             List {
@@ -41,6 +43,14 @@ struct ContentView: View {
             } message: {
                 Text(errorMessage)
             }
+            .toolbar {
+                ToolbarItemGroup (placement: .navigationBarLeading) {
+                    Text("Score: \(score)")
+                }
+                ToolbarItemGroup (placement: .navigationBarTrailing) {
+                    Button("Restart Game", action: startGame)
+                }
+            }
         }
     }
     
@@ -63,10 +73,21 @@ struct ContentView: View {
             return
         }
         
+        guard isLongEnough(word: answer) else {
+            wordError(title: "Word Too Short", message: "The word must be at least three letters.")
+            return
+        }
+        
+        guard isNotStart(word: answer) else {
+            wordError(title: "Word Not Unique", message: "The word cannot be the same as the start word!")
+            return
+        }
+        
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
         newWord = ""
+        score += 1
     }
     
     func startGame() {
@@ -104,6 +125,14 @@ struct ContentView: View {
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
         
         return misspelledRange.location == NSNotFound
+    }
+    
+    func isLongEnough(word: String) -> Bool {
+        word.count < 3 ? false : true
+    }
+    
+    func isNotStart(word: String) -> Bool {
+        word != rootWord ? true : false
     }
     
     func wordError(title: String, message: String) {
