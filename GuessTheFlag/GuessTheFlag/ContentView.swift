@@ -16,6 +16,11 @@ struct ContentView: View {
     
     @State private var score = 0
     
+    @State private var animationAmount = 0.0
+    @State private var selectedNumber = -1
+    @State private var opactityAmount = 1.0
+    @State private var scaleAmount = 1.0
+    
     let customBlue = Color(red: 0.1, green: 0.2, blue: 0.45)
     let customRed = Color(red: 0.76, green: 0.15, blue: 0.26)
     
@@ -41,12 +46,20 @@ struct ContentView: View {
                 }
                 ForEach(0..<3) { number in
                     Button {
-                        flagTapped(number)
+                        withAnimation {
+                            animationAmount += 360
+                            opactityAmount = 0.25
+                            scaleAmount = 0.9
+                            flagTapped(number)
+                        }
                     } label : {
                         Image(countries[number])
                             .renderingMode(.original)
                             .shadow(radius: 10)
                     }
+                    .rotation3DEffect(.degrees(self.selectedNumber == number ? animationAmount : 0), axis: (x: 0, y: 1, z: 0))
+                    .opacity(self.selectedNumber != number ? opactityAmount : 1)
+                    .scaleEffect(self.selectedNumber != number ? scaleAmount : 1)
                 }
             }
         }
@@ -58,6 +71,8 @@ struct ContentView: View {
     }
     
     func flagTapped(_ number: Int) {
+        self.selectedNumber = number
+        
         if number == correctAnswer {
             scoreTitle = "Correct"
             score += 1
@@ -71,6 +86,9 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        selectedNumber = -1
+        opactityAmount = 1
+        scaleAmount = 1
     }
 }
 
