@@ -176,12 +176,6 @@ struct StartPage: View {
                                 .padding(10)
                             
                             Button("Submit Answer") {
-//                                if opacityAnimationAmount != 0.0 {
-//                                    opacityAnimationAmount = 0.0
-//                                }
-//                                if pushAnimationAmount != 200.0 {
-//                                    pushAnimationAmount = 200.0
-//                                }
                                 
                                 let correct = calculateAnswer()
                                 if correct == true {

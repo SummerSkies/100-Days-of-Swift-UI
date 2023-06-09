@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+struct Flag: View {
+    var image: String
+    
+    init(image: String) {
+        self.image = image
+    }
+    
+    var body: some View {
+        Image(image)
+            .renderingMode(.original)
+            .shadow(radius: 10)
+    }
+}
+
 struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
@@ -53,9 +67,7 @@ struct ContentView: View {
                             flagTapped(number)
                         }
                     } label : {
-                        Image(countries[number])
-                            .renderingMode(.original)
-                            .shadow(radius: 10)
+                        Flag(image: countries[number])
                     }
                     .rotation3DEffect(.degrees(self.selectedNumber == number ? animationAmount : 0), axis: (x: 0, y: 1, z: 0))
                     .opacity(self.selectedNumber != number ? opactityAmount : 1)

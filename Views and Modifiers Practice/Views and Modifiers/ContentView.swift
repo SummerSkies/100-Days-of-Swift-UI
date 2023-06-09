@@ -11,6 +11,10 @@ extension View {
     func titleStyle() -> some View {
         modifier(Title())
     }
+    
+    func largeBlueFont() -> some View {
+        modifier(BlueFont())
+    }
 }
 
 struct ContentView: View {
@@ -94,6 +98,14 @@ struct Title: ViewModifier {
             .padding()
             .background(.blue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+struct BlueFont: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 50, weight: .heavy))
+            .foregroundColor(.blue)
     }
 }
 
